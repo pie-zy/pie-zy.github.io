@@ -3,7 +3,20 @@
   <entry>
     <title>博客</title>
     <url>/2025/06/25/%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>在每个博客最前面都要添加下面的开头内容（在源代码模式下）</p>
+    <content><![CDATA[<p>参考文献：<a href="https://zhuanlan.zhihu.com/p/102592286">从零开始搭建个人博客（超详细） - 知乎</a></p>
+<p>问题以及解决方案：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/zycppx/blog.git</span><br></pre></td></tr></table></figure>
+
+<p>这个操作<code>git clone</code>连不上网站时，可以尝试用用 SSH 克隆（如果已设置 SSH key）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:zycppx/blog.git</span><br></pre></td></tr></table></figure>
+
+
+
+<p>文件提交问题</p>
+<p><img src="D:_Typora\somephoto\image-20250605173324161.png" alt="image-20250605173324161"></p>
+<p>出现上面这个就是新创建的文件，但是并没有被提交到本地仓库中，要先<code>git add</code>添加到临时缓冲区，再<code>git commit -m &quot;文件名&quot;</code>提交到本地仓库</p>
+<p>最后将本地仓库提交到远程仓库：<code>git push origin main</code></p>
+<p>在每个博客最前面都要添加下面的开头内容（在源代码模式下）</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: ret2的几种攻击原理总结</span><br><span class="line">date: 2025-06-25 14:52</span><br><span class="line">tags:</span><br><span class="line">  - Pwn</span><br><span class="line">    categories:Pwn</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
 
 
