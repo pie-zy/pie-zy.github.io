@@ -16,10 +16,10 @@
 <p>出现上面这个就是新创建的文件，但是并没有被提交到本地仓库中，要先<code>git add</code>添加到临时缓冲区，再<code>git commit -m &quot;文件名&quot;</code>提交到本地仓库</p>
 <p>最后将本地仓库提交到远程仓库：<code>git push origin main</code></p>
 <p>在每个博客最前面都要添加下面的开头内容（在源代码模式下）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: ret2的几种攻击原理总结</span><br><span class="line">date: 2025-06-25 14:52</span><br><span class="line">tags:</span><br><span class="line">  - Pwn</span><br><span class="line">    categories:Pwn</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: ret2的几种攻击原理总结</span><br><span class="line">date: 2025-06-25 14:52</span><br><span class="line">tags:</span><br><span class="line">  - Pwn</span><br><span class="line">categories:Pwn</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
 
-
-
+<p><img src="D:_Typora\somephoto\image-20250627223035821.png" alt="image-20250627223035821"></p>
+<p>报这种错误看上面错误提示，是标签格式错误</p>
 <h2 id="新建博客提交"><a href="#新建博客提交" class="headerlink" title="新建博客提交"></a>新建博客提交</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#清除缓存</span></span><br><span class="line"><span class="variable">$hexo</span> c</span><br><span class="line"><span class="comment">#新建静态文件</span></span><br><span class="line"><span class="variable">$hexo</span> g</span><br><span class="line"><span class="comment">#提交文件</span></span><br><span class="line"><span class="variable">$hexo</span> d</span><br></pre></td></tr></table></figure>
 
 
@@ -152,7 +152,8 @@
         <category>Pwn</category>
       </categories>
       <tags>
-        <tag>Pwn,Pwn做题</tag>
+        <tag>Pwn</tag>
+        <tag>Pwn做题</tag>
       </tags>
   </entry>
   <entry>
@@ -219,7 +220,8 @@
         <category>Pwn</category>
       </categories>
       <tags>
-        <tag>Pwn,Pwn前置</tag>
+        <tag>Pwn</tag>
+        <tag>Pwn前置</tag>
       </tags>
   </entry>
 </search>
