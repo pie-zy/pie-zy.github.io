@@ -1,47 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>博客</title>
-    <url>/2025/06/05/%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>参考文献：<a href="https://zhuanlan.zhihu.com/p/102592286">从零开始搭建个人博客（超详细） - 知乎</a></p>
-<p>问题以及解决方案：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/zycppx/blog.git</span><br></pre></td></tr></table></figure>
-
-<p>这个操作<code>git clone</code>连不上网站时，可以尝试用用 SSH 克隆（如果已设置 SSH key）：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:zycppx/blog.git</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="文件提交问题"><a href="#文件提交问题" class="headerlink" title="文件提交问题"></a>文件提交问题</h2><p><img src="D:_Typora\somephoto\image-20250605173324161.png" alt="image-20250605173324161"></p>
-<p>出现上面这个就是新创建的文件，但是并没有被提交到本地仓库中，要先<code>git add</code>添加到临时缓冲区，再<code>git commit -m &quot;文件名&quot;</code>提交到本地仓库</p>
-<p>最后将本地仓库提交到远程仓库：<code>git push origin main</code></p>
-<p>在每个博客最前面都要添加下面的开头内容（在源代码模式下）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: ret2的几种攻击原理总结</span><br><span class="line">date: 2025-06-25 14:52</span><br><span class="line">tags:</span><br><span class="line">  - Pwn</span><br><span class="line">categories:Pwn</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<p><img src="D:_Typora\somephoto\image-20250627223035821.png" alt="image-20250627223035821"></p>
-<p>报这种错误看上面错误提示，是标签格式错误</p>
-<h2 id="新建博客提交"><a href="#新建博客提交" class="headerlink" title="新建博客提交"></a>新建博客提交</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#清除缓存</span></span><br><span class="line"><span class="variable">$hexo</span> c</span><br><span class="line"><span class="comment">#新建静态文件</span></span><br><span class="line"><span class="variable">$hexo</span> g</span><br><span class="line"><span class="comment">#提交文件</span></span><br><span class="line"><span class="variable">$hexo</span> d</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&quot;name&quot;</span>       <span class="comment"># 新建文章</span></span><br><span class="line">hexo new page <span class="string">&quot;name&quot;</span>  <span class="comment"># 新建页面</span></span><br><span class="line">hexo g                <span class="comment"># 生成页面</span></span><br><span class="line">hexo d                <span class="comment"># 部署</span></span><br><span class="line">hexo g -d             <span class="comment"># 生成页面并部署</span></span><br><span class="line">hexo s                <span class="comment"># 本地预览</span></span><br><span class="line">hexo clean            <span class="comment"># 清除缓存和已生成的静态文件</span></span><br><span class="line">hexo <span class="built_in">help</span>             <span class="comment"># 帮助</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="git-bash中的指令"><a href="#git-bash中的指令" class="headerlink" title="git bash中的指令"></a>git bash中的指令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#复制</span></span><br><span class="line">Ctrl + Insert</span><br><span class="line"><span class="comment">#粘贴</span></span><br><span class="line">Shift + Insert</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="插入图片失败解决"><a href="#插入图片失败解决" class="headerlink" title="插入图片失败解决"></a>插入图片失败解决</h2><p>下载插件<code>hexo-asset-image</code>，在bash界面执行命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="variable">$npm</span> install hexo-asset-img --save</span><br></pre></td></tr></table></figure>
-
-<p>下载插件也不行，只能参考博客，但是我的typora图片存储路径已经被我改过了，所以唯一的方法就是在<code>_posts</code>文件夹下自己创建一个同名文件夹一点一点存入图片了</p>
-]]></content>
-      <tags>
-        <tag>test</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ret2的几种攻击原理总结</title>
     <url>/2025/06/25/ret2%E7%9A%84%E5%87%A0%E7%A7%8D%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h1 id="ret2的几种攻击原理总结"><a href="#ret2的几种攻击原理总结" class="headerlink" title="ret2的几种攻击原理总结"></a>ret2的几种攻击原理总结</h1><p>主要是对ret2libc3的详细过程总结</p>
@@ -161,7 +120,9 @@
   <entry>
     <title>添加修改pwn题的libc文件</title>
     <url>/2025/06/27/add-pwn-libc/</url>
-    <content><![CDATA[<h1 id="添加修改pwn题的libc文件"><a href="#添加修改pwn题的libc文件" class="headerlink" title="添加修改pwn题的libc文件"></a>添加修改pwn题的libc文件</h1><p>图片无法正常显示查看GitHub下同名文件中的同名图片文件，找了很多方法也无法正常显示</p>
+    <content><![CDATA[<h1 id="添加修改pwn题的libc文件"><a href="#添加修改pwn题的libc文件" class="headerlink" title="添加修改pwn题的libc文件"></a>添加修改pwn题的libc文件</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">图片无法正常显示查看我的GitHub下同名文件中的同名图片文件，找了很多方法也无法正常显示</span><br></pre></td></tr></table></figure>
+
+<p>github地址：<a href="https://github.com/pie-zy/pie-zy.github.io/tree/main/2025/06/27/add-pwn-libc">pie-zy.github.io&#x2F;2025&#x2F;06&#x2F;27&#x2F;add-pwn-libc at main · pie-zy&#x2F;pie-zy.github.io</a></p>
 <p>参考文章：<a href="https://blog.csdn.net/m0_52772399/article/details/128182925#:~:text=%E6%A0%B9%E6%8D%AE%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%95%E7%94%A8%E7%9A%84%E4%BE%8B%E5%AD%90">关于glibc-all-in-one缺失libc_2.23-0ubuntu10 glibc-all-in-one-CSDN博客</a></p>
 <p><a href="https://tsuk1ctf.github.io/post/17727.html">glibc-all-in-one添加libc - Tsuk1</a></p>
 <h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="variable">$ldd</span> pwn</span><br></pre></td></tr></table></figure>
