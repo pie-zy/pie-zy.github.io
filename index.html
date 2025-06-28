@@ -245,7 +245,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-28 09:37:08" itemprop="dateModified" datetime="2025-06-28T09:37:08+08:00">2025-06-28</time>
+      <time title="修改时间：2025-06-28 09:43:27" itemprop="dateModified" datetime="2025-06-28T09:43:27+08:00">2025-06-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -287,36 +287,36 @@
 <h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ldd</span> pwn</span><br></pre></td></tr></table></figure>
 
 <p>查看当前可执行文件的libc和ld版本</p>
-<p><img src="/image-20250627213335462.png" alt="image-20250627213335462"></p>
+<p><img src="/./%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9pwn%E9%A2%98%E7%9A%84libc%E6%96%87%E4%BB%B6/image-20250627213335462.png" alt="image-20250627213335462"></p>
 <p>但是这个版本是错的，我们要通过题目给的libc找到正确版本（有些题目的libc未泄露，要我们自己去获得）</p>
 <p><strong>获取正确版本</strong></p>
 <p>查看题目给的libc文件，能够在其中找到正确的elf可执行文件应该使用的libc和ld版本</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$strings</span> ./libc-x.xx | grep ubuntu</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image-20250627101829057.png" alt="image-20250627101829057"></p>
+<p><img src="/./%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9pwn%E9%A2%98%E7%9A%84libc%E6%96%87%E4%BB%B6/image-20250627101829057.png" alt="image-20250627101829057"></p>
 <p>这里可发现使用的libc版本是2.19-0ubuntu6.15</p>
 <h2 id="添加文件"><a href="#添加文件" class="headerlink" title="添加文件"></a>添加文件</h2><p>我们要下载对应的两个libc6和libc6-dbg两个文件，要能找到他们两的下载地址，这个很麻烦，我拿我上面的2.19版本举例子</p>
 <h3 id="步骤一"><a href="#步骤一" class="headerlink" title="步骤一"></a>步骤一</h3><p>直接在网站上搜索<code>2.19-0ubuntu6.15</code>版本，找到ubuntu官方的一个下载网站</p>
-<p><img src="/image-20250627115924472.png" alt="image-20250627115924472"></p>
+<p><img src="/./%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9pwn%E9%A2%98%E7%9A%84libc%E6%96%87%E4%BB%B6/image-20250627115924472.png" alt="image-20250627115924472"></p>
 <p>该网站路径：<code>[2.19-0ubuntu6.15 : libc6-x32-dbgsym : amd64 : Trusty (14.04) : Ubuntu](https://launchpad.net/ubuntu/trusty/amd64/libc6-x32-dbgsym/2.19-0ubuntu6.15)</code></p>
 <p>但是该网站并非我们要找的两个文件的下载网站，我们要下载的是libc6和libc6-dbg</p>
 <h3 id="步骤二"><a href="#步骤二" class="headerlink" title="步骤二"></a>步骤二</h3><h4 id="—–已经淘汰的演示"><a href="#—–已经淘汰的演示" class="headerlink" title="—–已经淘汰的演示"></a>—–已经淘汰的演示</h4><p>将网址<code>libc6-x32-dbgsym</code>更改为上面两项，找到这两个地址安装路径</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://launchpad.net/ubuntu/trusty/i386/libc6/2.19-0ubuntu6.15</span><br><span class="line">https://launchpad.net/ubuntu/trusty/i386/libc6-dbg/2.19-0ubuntu6.15</span><br></pre></td></tr></table></figure>
 
-<p><img src="/image-20250627154436404.png" alt="image-20250627154436404"></p>
+<p><img src="/./%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9pwn%E9%A2%98%E7%9A%84libc%E6%96%87%E4%BB%B6/image-20250627154436404.png" alt="image-20250627154436404"></p>
 <p>down是download更改的，自定义的sh，用于扩展glibc中的新libc文件</p>
-<p><img src="/image-20250627154551898.png" alt="image-20250627154551898"></p>
+<p><img src="/./%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9pwn%E9%A2%98%E7%9A%84libc%E6%96%87%E4%BB%B6/image-20250627154551898.png" alt="image-20250627154551898"></p>
 <p>更改这两个位置的路径，执行文件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> ./down 2.19-0ubuntu6.15_i386</span><br></pre></td></tr></table></figure>
 
 <p>即可下载下来</p>
 <h4 id="—–新演示"><a href="#—–新演示" class="headerlink" title="—–新演示"></a>—–新演示</h4><p>上述是用shell脚本写的，已经被淘汰了，我不知道他怎么用shell脚本找到的下载链接进行下载，反正我一直不行</p>
 <p>用python脚本，glibc下的down.py文件</p>
-<p><img src="/image-20250627173913799.png" alt="image-20250627173913799"></p>
+<p><img src="/./%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9pwn%E9%A2%98%E7%9A%84libc%E6%96%87%E4%BB%B6/image-20250627173913799.png" alt="image-20250627173913799"></p>
 <p>urls内里面是想拉取的网址，可以拉取多个链接</p>
 <p>folder_name就是我们想存储在libs文件夹下自定义的文件夹名，更改这三处就可以</p>
 <h3 id="步骤三"><a href="#步骤三" class="headerlink" title="步骤三"></a>步骤三</h3><p>文件已经被下载到了指定文件夹下</p>
-<p><img src="/image-20250627203142618.png" alt="image-20250627203142618"></p>
+<p><img src="/./%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9pwn%E9%A2%98%E7%9A%84libc%E6%96%87%E4%BB%B6/image-20250627203142618.png" alt="image-20250627203142618"></p>
 <p>接下来在 glibc-all-in-one 下使用extract生成版本文件</p>
 <p>生成的 libc 二进制文件我存放在了<code>/libs/2.19-0ubuntu6.15_i386</code>文件夹下</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./extract libs/2.19-0ubuntu6.15_i386/libc6_2.19-0ubuntu6.15_i386.deb libs/2.19-0ubuntu6.15_i386</span><br></pre></td></tr></table></figure>
@@ -325,7 +325,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./extract libs/2.19-0ubuntu6.15_i386/libc6-dbg_2.19-0ubuntu6.15_i386.deb libs/2.19-0ubuntu6.15_i386/.debug</span><br></pre></td></tr></table></figure>
 
 <p>注意：<strong>前后两个路径要么都以<code>libs</code>开头，表示当前文件夹下路径，要么都用绝对路径做开头<code>/libs</code>开头表示的就是从根目录开始寻找</strong>，否则会识别不了路径和文件</p>
-<p><img src="/image-20250627205603597.png" alt="image-20250627205603597"></p>
+<p><img src="/./%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9pwn%E9%A2%98%E7%9A%84libc%E6%96%87%E4%BB%B6/image-20250627205603597.png" alt="image-20250627205603597"></p>
 <p>目前做pwn栈溢出题目换ld和libc文件不需要用到libc 调试文件，也就是第二条命令暂时用不到</p>
 <h2 id="修改libc和ld"><a href="#修改libc和ld" class="headerlink" title="修改libc和ld"></a>修改libc和ld</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$patchelf</span> --replace-needed libc.so.6 /home/pie/glibc-all-in-one/libs/2.19-0ubuntu6.15_i386/libc-2.19.so level3		<span class="comment">#更改libc</span></span><br><span class="line"><span class="variable">$patchelf</span> --set-interpreter /home/pie/glibc-all-in-one/libs/2.19-0ubuntu6.15_i386/ld-2.19.so level3	<span class="comment">#更改ld</span></span><br></pre></td></tr></table></figure>
 
