@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>ret2的几种攻击原理总结</title>
+    <title>添加修改pwn题的libc文件</title>
     <url>/2025/06/27/add-pwn-libc/</url>
     <content><![CDATA[<h1 id="添加修改pwn题的libc文件"><a href="#添加修改pwn题的libc文件" class="headerlink" title="添加修改pwn题的libc文件"></a>添加修改pwn题的libc文件</h1><p>参考文章：<a href="https://blog.csdn.net/m0_52772399/article/details/128182925#:~:text=%E6%A0%B9%E6%8D%AE%E5%BC%95%E7%94%A8%E5%92%8C%E5%BC%95%E7%94%A8%E7%9A%84%E4%BE%8B%E5%AD%90">关于glibc-all-in-one缺失libc_2.23-0ubuntu10 glibc-all-in-one-CSDN博客</a></p>
 <p><a href="https://tsuk1ctf.github.io/post/17727.html">glibc-all-in-one添加libc - Tsuk1</a></p>
