@@ -23,7 +23,7 @@
     <meta name="description" content="ret2的几种攻击原理总结主要是对ret2libc3的详细过程总结  修改返回地址，让其指向溢出数据中的一段指令（shellcode） 修改返回地址，让其指向内存中已有的某个函数（ret2text） 修改返回地址，让其指向内存中已有的数段指令（ret2syscall） 有system无&#x3D;有&#x2F;bin&#x2F;sh，直接传入system地址和参数地址（ret2libc1） 有sy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ret2的几种攻击原理总结">
-<meta property="og:url" content="https://pie-zy.github.io/2025/06/25/ret2%E7%9A%84%E5%87%A0%E7%A7%8D%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:url" content="https://pie-zy.github.io/2025/06/25/Several%20ret2%20Attack%20Principles/index.html">
 <meta property="og:site_name" content="Pie">
 <meta property="og:description" content="ret2的几种攻击原理总结主要是对ret2libc3的详细过程总结  修改返回地址，让其指向溢出数据中的一段指令（shellcode） 修改返回地址，让其指向内存中已有的某个函数（ret2text） 修改返回地址，让其指向内存中已有的数段指令（ret2syscall） 有system无&#x3D;有&#x2F;bin&#x2F;sh，直接传入system地址和参数地址（ret2libc1） 有sy">
 <meta property="og:locale" content="zh_CN">
@@ -35,10 +35,10 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://pie-zy.github.io/2025/06/25/ret2%E7%9A%84%E5%87%A0%E7%A7%8D%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93/">
+<link rel="canonical" href="https://pie-zy.github.io/2025/06/25/Several%20ret2%20Attack%20Principles/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://pie-zy.github.io/2025/06/25/ret2%E7%9A%84%E5%87%A0%E7%A7%8D%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93/","path":"2025/06/25/ret2的几种攻击原理总结/","title":"ret2的几种攻击原理总结"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://pie-zy.github.io/2025/06/25/Several%20ret2%20Attack%20Principles/","path":"2025/06/25/Several ret2 Attack Principles/","title":"ret2的几种攻击原理总结"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>ret2的几种攻击原理总结 | Pie</title>
@@ -214,7 +214,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://pie-zy.github.io/2025/06/25/ret2%E7%9A%84%E5%87%A0%E7%A7%8D%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="https://pie-zy.github.io/2025/06/25/Several%20ret2%20Attack%20Principles/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/pie.png">
@@ -417,8 +417,8 @@
             <div class="post-nav-item">
             </div>
             <div class="post-nav-item">
-                <a href="/2025/06/27/add-pwn-libc/" rel="next" title="添加修改pwn题的libc文件">
-                  添加修改pwn题的libc文件 <i class="fa fa-angle-right"></i>
+                <a href="/2025/06/25/add-pwn-libc/" rel="next" title="ret2的几种攻击原理总结">
+                  ret2的几种攻击原理总结 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
